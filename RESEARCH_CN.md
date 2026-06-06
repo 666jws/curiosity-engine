@@ -578,3 +578,63 @@ GitHub ⭐ 是方向性信号，不是实验证据。高 ⭐ 低 ⭐ 都不能�
 - 日志路径从 `~/.openclaw/logs/gateway.log` 迁移至 `/tmp/openclaw/openclaw-2026-06-03.log`
 - LaunchAgent自动重启记录: 5/24~6/3共17次restart (source=launchd-handoff)
 - 当前PID 76733，loaded 10 internal hook handlers (含context-distill+emergency-scanner)
+
+### v2.9 (2026-06-05) — D7架构日：从"建模块"到"系统咬合"
+
+**架构范式转换**: 从"建新模块"到"让已有模块互相咬合"。
+- 三圆架构落地：记忆圆(KG节点+时间线) × 核心圆(道衍引擎+判断层) × 工具圆(能力延伸)
+- 真实咬合点是文件系统而非代码接口——模块间通过文件隐式通信
+- 管道五件套：source-gate → quality-check → domain-bridge → lifecycle → orchestrator
+
+**四层模型路由**: T1(Flash/cron) → T2(Flash/轻推理) → T3(M3/深度探索) → T4(Pro/复杂推理)
+
+**H3已完成**: 150样本/4评估者/kappa=0.92 (Almost Perfect)，远超D7目标
+
+### v2.91 (2026-06-06 20:00) — 调度器六层能力：从值班保安到管家
+
+**今天做了什么：不是修bug，是让调度器质变。**
+
+#### 六层能力
+
+| # | 能力 | 实现 | 意义 |
+|:--:|------|------|------|
+| ① | **认知负荷感知** | 调度器每轮评估LOW/MEDIUM/HIGH/CRITICAL，按级过滤执行 | 知道"自己累不累"，合理调度 |
+| ② | **风险直觉** | token-tracker趋势加速+持续偏高检测，提前预警 | 在故障前发现问题 |
+| ③ | **外部情报闭环** | knowledge_gaps→自动搜索→回写KG，6条搜索渠道 | 发现缺口→找答案→内部化全自动 |
+| ④ | **主动思考** | 闲时回顾research-missions.json，检查KG数据支撑 | 不等指令，自己找活干 |
+| ⑤ | **子agent编排** | subagent-runner.js独立运行时，fork子进程执行复杂任务 | 多Agent协同基础 |
+| ⑥ | **运行契约** | runtime-contract.json定义三级自主度+不可变边界+策略门控 | 自主行动护栏 |
+
+#### 统一模型路由器
+
+4个入口→1个 `model-gateway.js`。直读openclaw.json，断路器+故障切换+消耗追踪。所有非Gateway模型调用唯一入口。
+
+#### 搜索渠道扩展
+
+```
+原: Bing中国 + 搜狗微信 (2条)
+新: + 知乎API(官方) + HN API(Firebase) + GitHub API + arXiv web_fetch (6条)
+```
+
+#### 并入的修复
+
+- P1排队黑洞消除（所有scanner有对应修复脚本）
+- 弹窗治理（仅🔴生命线+4h冷却）
+- 跨通道桥接双向（飞书↔WebChat自动同步）
+- cron精简（45→18活跃）
+- 学习任务切Flash（M3只在需要时用）
+
+#### 实验数据（6/6晚）
+
+| H1 | ✅ | 50样本/4评估者，3倍优于随机 |
+| H2 | 🔄 Day1 | A=95/B=93/C=90 |
+| H3 | ✅ | 150样本/kappa=0.92 |
+| H4 | 🔄 | 26主题池活跃 |
+| H5 | 🔄 | ITR 100% |
+| H6 | 🔄 Week2 OFF | 7912节点/21552边 |
+
+**系统健康**: 调度器23轮/14修复，16 scanner，KG 7912节点/21552边，0孤岛。
+
+#### v3.0 倒计时
+
+6月12日提交外部评审。这六层能力需要在v3.0中翻译成"这些能力如何验证了H1-H6假设"，而非"我们做了X"。
